@@ -8,8 +8,18 @@ description: Gestiona el tablero de GitHub Projects del proyecto en curso (estil
 Skill global. El board concreto de cada proyecto se define en `.claude/board.json` en la raíz del repo. **Siempre trabaja sobre el board del proyecto actual.**
 
 ## Requisitos
-- `gh` CLI autenticado con scope `project`: comprueba con `gh auth status` (debe listar `project` en scopes). Si falta: `gh auth login -s project -w` (login interactivo, lo hace el humano).
-- Si `gh` no está en el PATH: `export PATH="/opt/homebrew/bin:$PATH"`.
+Necesita `gh` CLI **instalado y autenticado con scope `project`**. Comprueba con `gh auth status`.
+
+- **Si `gh` NO está instalado**: NO lo instales por tu cuenta — **pide aprobación al usuario** y guíalo según su SO:
+  - macOS: `brew install gh`
+  - Debian/Ubuntu: `sudo apt install gh` (o ver https://cli.github.com)
+  - Windows: `winget install GitHub.cli`
+
+  Tras instalar, autentica: `gh auth login -s project -w` (login interactivo, lo hace el humano).
+- **Si `gh` está pero sin scope `project`** (`gh auth status` no lista `project`): `gh auth refresh -s project` (o `gh auth login -s project -w`).
+- Si `gh` no está en el PATH (macOS Homebrew): `export PATH="/opt/homebrew/bin:$PATH"`.
+
+Sin `gh` con scope `project` no puedes operar el tablero: para y resuelve esto primero (pidiendo el OK para instalar).
 
 ## Localizar el board
 Lee `.claude/board.json` de la raíz del repo. Trae: `owner`, `project_number`, `project_id`, y los `fields` (status/priority/area) con sus **option ids cacheados**. Si no existe ese archivo, ofrece crearlo (`gh project list --owner <owner>` para encontrar el número, `gh project field-list <num> --owner <owner> --format json` para los ids) y guárdalo.

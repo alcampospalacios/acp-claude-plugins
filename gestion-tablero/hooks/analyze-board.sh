@@ -7,9 +7,27 @@ BOARD="$DIR/.claude/board.json"
 [ -f "$BOARD" ] || exit 0
 
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
-command -v gh >/dev/null 2>&1 || exit 0
+
+# gh no instalado: avisa (con OK del usuario) en vez de callar.
+if ! command -v gh >/dev/null 2>&1; then
+  echo "## 📋 Tablero del proyecto — falta \`gh\`"
+  echo ""
+  echo "Este proyecto tiene un tablero (\`.claude/board.json\`) pero el CLI \`gh\` no está instalado, así que no puedo resumirlo ni actualizarlo."
+  echo "Con la aprobación del usuario, instálalo y autentícate:"
+  echo "- macOS: \`brew install gh\`  ·  Ubuntu/Debian: \`sudo apt install gh\`  ·  Windows: \`winget install GitHub.cli\`"
+  echo "- Luego: \`gh auth login -s project -w\`"
+  exit 0
+fi
+
 command -v python3 >/dev/null 2>&1 || exit 0
-gh auth status 2>/dev/null | grep -q "project" || exit 0
+
+# gh sin scope 'project': indica cómo añadirlo.
+if ! gh auth status 2>/dev/null | grep -q "project"; then
+  echo "## 📋 Tablero del proyecto — falta permiso en \`gh\`"
+  echo ""
+  echo "\`gh\` está instalado pero sin el scope \`project\`. Ejecuta: \`gh auth refresh -s project\` (o \`gh auth login -s project -w\`)."
+  exit 0
+fi
 
 info=$(python3 -c "import json,sys; d=json.load(open('$BOARD')); print(d['owner'], d['project_number'])" 2>/dev/null) || exit 0
 OWNER=$(printf '%s' "$info" | awk '{print $1}')
