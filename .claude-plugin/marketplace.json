@@ -1,0 +1,14 @@
+{
+  "name": "acp-plugins",
+  "owner": { "name": "Alejandro Campos Palacios" },
+  "metadata": {
+    "description": "Plugins personales de ACP para Claude Code."
+  },
+  "plugins": [
+    {
+      "name": "gestion-tablero",
+      "source": "./gestion-tablero",
+      "description": "Gestiona el tablero de GitHub Projects (estilo Jira) del proyecto actual: analiza al empezar (hook SessionStart) y actualiza al terminar un flujo."
+    }
+  ]
+}

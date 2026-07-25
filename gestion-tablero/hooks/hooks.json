@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/analyze-board.sh\"; exit 0",
+            "timeout": 15,
+            "statusMessage": "Analizando tablero del proyecto..."
+          }
+        ]
+      }
+    ]
+  }
+}
