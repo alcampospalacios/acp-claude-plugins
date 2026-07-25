@@ -6,8 +6,8 @@
   },
   "plugins": [
     {
-      "name": "gestion-tablero",
-      "source": "./gestion-tablero",
+      "name": "github-projects-board",
+      "source": "./github-projects-board",
       "description": "Gestiona el tablero de GitHub Projects (estilo Jira) del proyecto actual: analiza al empezar (hook SessionStart) y actualiza al terminar un flujo."
     }
   ]

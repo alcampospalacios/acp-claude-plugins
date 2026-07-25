@@ -4,7 +4,7 @@ Marketplace personal de plugins de Claude Code (Alejandro Campos Palacios).
 
 ---
 
-## Plugin: `gestion-tablero`
+## Plugin: `github-projects-board`
 
 Gestiona el tablero de **GitHub Projects** (estilo Jira) del proyecto en el que estés trabajando: te resume en qué te quedaste al empezar y actualiza las tarjetas conforme avanzas.
 
@@ -47,21 +47,21 @@ Por hacer → En curso → En espera → Hecho → En revisión → En producci�
 Desde GitHub (recomendado):
 ```
 /plugin marketplace add alcampospalacios/acp-claude-plugins
-/plugin install gestion-tablero@acp-plugins
+/plugin install github-projects-board@acp-plugins
 /reload-plugins
 ```
 
 O desde una copia local:
 ```
 /plugin marketplace add ~/Develop/acp-claude-plugins
-/plugin install gestion-tablero@acp-plugins
+/plugin install github-projects-board@acp-plugins
 /reload-plugins
 ```
 
 ### Actualizar a una versión nueva
 ```
 /plugin marketplace update acp-plugins
-/plugin update gestion-tablero@acp-plugins
+/plugin update github-projects-board@acp-plugins
 /reload-plugins
 ```
 (Si `/plugin update` no aparece: `/plugin uninstall …` y vuelve a instalar.)
@@ -94,7 +94,7 @@ El plugin solo actúa en proyectos que tengan un archivo **`.claude/board.json`*
 ```
 
 **La forma fácil:** no lo escribas a mano — pídeselo a Claude en ese proyecto:
-> "Configúrame el `board.json` de este proyecto para el plugin gestion-tablero" (o "crea el tablero si no existe").
+> "Configúrame el `board.json` de este proyecto para el plugin github-projects-board" (o "crea el tablero si no existe").
 
 Los `id` de campos/opciones se obtienen con:
 ```
@@ -109,9 +109,9 @@ gh project field-list <num> --owner <owner> --format json
 ## Contenido del plugin
 
 ```
-gestion-tablero/
+github-projects-board/
 ├── .claude-plugin/plugin.json      # manifiesto
-├── skills/gestion-tablero/SKILL.md # protocolo + comandos gh + gotchas
+├── skills/github-projects-board/SKILL.md # protocolo + comandos gh + gotchas
 ├── commands/tablero.md             # comando /tablero
 └── hooks/
     ├── hooks.json                  # SessionStart

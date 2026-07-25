@@ -2,7 +2,7 @@
 description: Analiza el tablero del proyecto actual y resume en qué se estaba
 ---
 
-Analiza el tablero de este proyecto con la skill `gestion-tablero`:
+Analiza el tablero de este proyecto con la skill `github-projects-board`:
 
 1. Lee `.claude/board.json` de la raíz del repo (owner, project_number, ids). Si no existe, ofrece crearlo.
 2. Lista los items: `gh project item-list <num> --owner <owner> --limit 60 --format json`.

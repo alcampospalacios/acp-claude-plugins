@@ -1,5 +1,5 @@
 ---
-name: gestion-tablero
+name: github-projects-board
 description: Gestiona el tablero de GitHub Projects del proyecto en curso (estilo Jira). Úsala (1) AL EMPEZAR una sesión de trabajo en un proyecto que tenga `.claude/board.json` — analiza el tablero y resume en qué se estaba; y (2) AL TERMINAR un flujo/tarea — mueve la tarjeta a su columna y actualiza su detalle. Es global pero se centra en el board del proyecto actual (lee `.claude/board.json` de la raíz del repo). Triggers: "tablero", "board", "kanban", "empezar a trabajar", "actualiza el tablero", "mueve la tarjeta", "en qué me quedé", terminar/cerrar una tarea o feature.
 ---
 
