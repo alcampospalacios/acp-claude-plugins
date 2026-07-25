@@ -8,6 +8,12 @@ Marketplace personal de plugins de Claude Code (Alejandro Campos Palacios).
 
 Gestiona el tablero de **GitHub Projects** (estilo Jira) del proyecto en el que estés trabajando: te resume en qué te quedaste al empezar y actualiza las tarjetas conforme avanzas.
 
+### Vista previa
+
+![Board de ejemplo](github-projects-board/assets/board-example.png)
+
+*Vista board agrupada por estado: `Por hacer → En curso → En espera → Hecho → En revisión → En producción`. Cada columna muestra su descripción y las tarjetas (draft items) con su detalle.*
+
 ### ¿Se carga solo o hay que invocarlo?
 
 **Las dos cosas** — hay una parte automática y otra manual:
