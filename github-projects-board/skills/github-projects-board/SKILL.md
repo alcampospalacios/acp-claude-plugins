@@ -1,6 +1,6 @@
 ---
 name: github-projects-board
-description: Gestiona el tablero de GitHub Projects del proyecto en curso (estilo Jira). Úsala (1) AL EMPEZAR una sesión de trabajo en un proyecto que tenga `.claude/board.json` — analiza el tablero y resume en qué se estaba; y (2) AL TERMINAR un flujo/tarea — mueve la tarjeta a su columna y actualiza su detalle. Es global pero se centra en el board del proyecto actual (lee `.claude/board.json` de la raíz del repo). Triggers: "tablero", "board", "kanban", "empezar a trabajar", "actualiza el tablero", "mueve la tarjeta", "en qué me quedé", terminar/cerrar una tarea o feature.
+description: Gestiona el tablero de GitHub Projects del proyecto en curso (estilo Jira). Úsala (1) AL EMPEZAR una sesión de trabajo en un proyecto que tenga `.claude/board.json` — analiza el tablero y resume en qué se estaba; (2) AL RECIBIR CUALQUIER TAREA en ese proyecto — comprueba si ya hay tarjeta o si es trabajo nuevo que hay que dar de alta, ANTES de tocar código; y (3) AL TERMINAR un flujo/tarea — mueve la tarjeta a su columna y actualiza su detalle. Es global pero se centra en el board del proyecto actual (lee `.claude/board.json` de la raíz del repo). Triggers: "tablero", "board", "kanban", "empezar a trabajar", "actualiza el tablero", "mueve la tarjeta", "en qué me quedé", terminar/cerrar una tarea o feature, y CUALQUIER petición de trabajo (bug, feature, arreglo) en un repo con `.claude/board.json`.
 ---
 
 # Gestión del tablero (GitHub Projects, estilo Jira)
@@ -31,11 +31,28 @@ gh project item-list <num> --owner <owner> --limit 50 --format json \
 ```
 Resume al usuario **por columna**: qué hay en *En curso*, *En espera*, *En revisión*, *En producción*; y propón lo siguiente de *Por hacer* (prioriza `High`). Si una tarjeta *En curso* tiene checklist en su body, di por dónde iba. No hace falta pedir permiso para leer.
 
-## 2) AL TERMINAR un flujo — actualizar
+## 2) AL RECIBIR UNA TAREA — ¿ya está en el tablero o es nueva?
+
+**Antes de tocar código**, cada vez que el usuario pida trabajo (un bug, una feature, un arreglo) en un repo con `.claude/board.json`, mira si ya hay tarjeta. Cuesta una llamada y evita los dos fallos típicos: duplicar tarjetas y trabajar fuera del tablero.
+
+1. **Busca** entre los items que no estén cerrados:
+   ```bash
+   gh project item-list <num> --owner <owner> --limit 60 --format json \
+     --jq '.items[] | select(.status != "En producción") | "\(.status)\t\(.content.number // "-")\t\(.content.title // .title)"'
+   ```
+   Compara por **significado**, no por literal: "no puedo continuar la carrera" y "se pierde el entreno al minimizar" son la misma tarjeta. Si dudas, abre el body y léelo.
+2. **Si existe** → muévela a *En curso* y dile al usuario por dónde iba (según el checklist de su body). Si lo que pide es sólo una parte de esa tarjeta, dilo en vez de darla entera por empezada.
+3. **Si NO existe** → **créala antes de empezar**, con Priority y Area, y déjala en *En curso*. El body inicial es el encargo con las palabras del usuario (si es un bug, sus pasos de reproducción tal cual: es la fuente de verdad, no la reescribas).
+4. **Si encaja en varias**, o no está claro si es tarjeta nueva o parte de una existente → pregunta en una línea y sigue trabajando; no bloquees por esto.
+
+**No crees tarjeta para todo.** Un typo, renombrar una variable, responder una pregunta, explorar o depurar sin entregable no van al tablero. La regla práctica: **si va a acabar en un commit o el usuario va a revisarlo, merece tarjeta**; si no, no.
+
+## 3) AL TERMINAR un flujo — actualizar
 Cuando cierres/avances una unidad de trabajo:
 1. **Mueve la tarjeta** de columna (ver flujo abajo).
 2. **Actualiza su body** (Markdown) reflejando qué se hizo / dónde quedó / qué falta (usa checklists `- [ ]`).
-3. **Crea items nuevos** si surgió trabajo nuevo, con Priority y Area.
+3. **Crea items nuevos** si surgió trabajo colateral, con Priority y Area.
+4. **Di qué NO cubre** lo hecho (techo conocido, casos sin cubrir) en el body: es lo primero que se olvida y lo que más duele después.
 
 ### Flujo estándar — IGUAL en TODOS los proyectos (homogeneidad)
 `Por hacer → En curso → En espera → Hecho → En revisión → En producción`
@@ -58,9 +75,22 @@ Usa **este mismo set y orden** al crear el board de cualquier proyecto nuevo. Lo
 
 ## Comandos (cheat sheet)
 
+### Drafts vs issues — un board mezcla los dos
+Un item es **draft** (nació en el board) o un **issue** del repo. Se distingue en el JSON: `content.number` no nulo → es issue.
+
+| | Draft | Issue |
+|---|---|---|
+| Crear | `gh project item-create <num> --owner <owner> --title … --body …` | `gh issue create --title … --body-file …` + `gh project item-add <num> --owner <owner> --url <url>` |
+| Título / body | `gh project item-edit --id <DI_…> --title … --body …` | `gh issue edit <n> --title … --body …` |
+| Añadir hallazgos | reescribir el body | **`gh issue comment <n> --body-file <f>`** — mejor que editar: no pisas el reporte original del usuario y queda la cronología |
+| Estado / priority / area | `gh project item-edit --id <PVTI_…> --field-id …` | igual, con el **item id** `PVTI_…` (no el número del issue) |
+| Cerrar | mover a *Hecho* | `Closes #n` en el commit cierra el issue, pero **la tarjeta no se mueve sola** si renombraste las columnas (el workflow integrado apunta a option ids que cambiaron) → muévela tú y compruébalo |
+
+Cuál usar: si el trabajo acaba en un commit, **issue** (se enlaza con `Closes #n` y queda trazado desde el código); si es gestión (deploy, credenciales, decisión, recordatorio), **draft**.
+
 **IDs — OJO (gotcha clave):**
 - Editar **estado / priority / area** usa el **item id** (`PVTI_…`, campo `.id`).
-- Editar **título / body** usa el **content id** (`DI_…`, campo `.content.id`).
+- Editar **título / body de un draft** usa el **content id** (`DI_…`, campo `.content.id`).
 
 **Mover de columna (estado):**
 ```bash

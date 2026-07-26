@@ -1,7 +1,7 @@
 {
   "name": "github-projects-board",
-  "version": "1.1.0",
-  "description": "Gestiona el tablero de GitHub Projects (estilo Jira) del proyecto en curso. Analiza el tablero automáticamente al empezar la sesión (hook SessionStart) y lo actualiza al terminar un flujo. Global, se centra en el board del proyecto vía .claude/board.json.",
+  "version": "1.2.0",
+  "description": "Gestiona el tablero de GitHub Projects (estilo Jira) del proyecto en curso. Analiza el tablero automáticamente al empezar la sesión (hook SessionStart), comprueba si cada tarea nueva ya tiene tarjeta antes de empezar, y lo actualiza al terminar un flujo. Global, se centra en el board del proyecto vía .claude/board.json.",
   "author": { "name": "Alejandro Campos Palacios" },
   "hooks": "./hooks/hooks.json"
 }

@@ -23,8 +23,9 @@ Gestiona el tablero de **GitHub Projects** (estilo Jira) del proyecto en el que 
 | 🟢 **Automático** (hook `SessionStart`) | Al **empezar / reanudar / limpiar** una sesión, **sin que hagas nada** | Si el proyecto tiene `.claude/board.json`, inyecta un resumen del tablero (qué hay En curso / En espera, qué está en Hecho pendiente de tu revisión, y el siguiente Por hacer). Si el proyecto **no** tiene `board.json`, no hace nada. |
 | 🔵 **Manual** (comando) | Escribes **`/tablero`** | Fuerza el análisis del tablero en ese momento. |
 | 🔵 **Automático por contexto** (skill) | Cuando hablas de *"tablero / kanban / en qué me quedé / actualiza el tablero"* o **terminas una tarea** | El agente aplica el protocolo: mueve las tarjetas (hasta *Hecho*) y actualiza sus detalles. |
+| 🟢 **Automático al pedir trabajo** (skill) | Cuando le **pides cualquier tarea** (bug, feature, arreglo) en un repo con `board.json` | Antes de tocar código mira si ya hay tarjeta: si la hay la pasa a *En curso* y te dice por dónde iba; si no, **la crea** con Priority y Area. Los cambios triviales no generan tarjeta. |
 
-> En resumen: **no tienes que hacer nada al empezar** — el resumen sale solo. `/tablero` es solo por si lo quieres a mitad de sesión.
+> En resumen: **no tienes que hacer nada** — el resumen sale solo al empezar, y cada tarea que pidas se da de alta o se retoma sin que lo pidas. `/tablero` es solo por si quieres el análisis a mitad de sesión.
 
 ### Reparto de responsabilidades
 

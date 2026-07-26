@@ -44,4 +44,6 @@ echo ""
 echo "$SUMMARY"
 echo ""
 echo "_Al empezar: revisa en qué se estaba (En curso / En espera), qué hay en Hecho pendiente de revisión del usuario, y propón el siguiente paso de Por hacer (prioriza High). 'En revisión' y 'En producción' las mueve el usuario, no el agente._"
+echo ""
+echo "_Y ante CUALQUIER tarea que llegue durante la sesión: mira primero si ya está en esta lista. Si está, muévela a En curso; si no, créala antes de empezar (salvo cambios triviales). Ver la skill github-projects-board §2._"
 exit 0
